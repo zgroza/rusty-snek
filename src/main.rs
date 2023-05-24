@@ -89,7 +89,7 @@ fn main() {
         }
         stdout.flush().unwrap();
 
-        if crossterm::event::poll(Duration::from_secs(1)).is_ok() {
+        if crossterm::event::poll(Duration::from_millis(200 - snake.body.len() as u64)).unwrap() {
             match crossterm::event::read() {
                 Ok(Event::Key(KeyEvent { code, .. })) => {
                     snake.direction = match code {
@@ -101,7 +101,7 @@ fn main() {
                         _ => snake.direction,
                     };
                 },
-                _ => {break;}
+                _ => {}
             }
         }
 
@@ -116,8 +116,6 @@ fn main() {
         if snake.check_collision() {
             break;
         }
-
-        std::thread::sleep(Duration::from_millis(100));
     }
 
     stdout.execute(cursor::Show).unwrap();
