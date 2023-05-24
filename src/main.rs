@@ -12,7 +12,7 @@ const FOOD_CHAR: char = 'X';
 
 struct Snake {
     body: Vec<(u16, u16)>,
-    growSpace: (u16, u16),
+    grow_space: (u16, u16),
     direction: Direction,
 }
 
@@ -27,7 +27,7 @@ impl Snake {
     fn new() -> Snake {
         Snake {
             body: vec![(WIDTH / 2, HEIGHT / 2)],
-            growSpace: (WIDTH / 2 + 1, HEIGHT / 2 + 1),
+            grow_space: (WIDTH / 2 + 1, HEIGHT / 2 + 1),
             direction: Direction::Right,
         }
     }
@@ -41,11 +41,11 @@ impl Snake {
             Direction::Right => (head_x + 1, head_y),
         };
         self.body.insert(0, (new_x, new_y));
-        self.growSpace = self.body.pop().unwrap();
+        self.grow_space = self.body.pop().unwrap();
     }
 
     fn grow(&mut self) {
-        self.body.push(self.growSpace);
+        self.body.push(self.grow_space);
     }
 
     fn check_collision(&self) -> bool {
@@ -79,7 +79,7 @@ fn main() {
     }
     
     'main_loop: loop {
-        stdout.execute(cursor::MoveTo(snake.growSpace.0, snake.growSpace.1)).unwrap();
+        stdout.execute(cursor::MoveTo(snake.grow_space.0, snake.grow_space.1)).unwrap();
         print!(" ");
         stdout.execute(cursor::MoveTo(food.0, food.1)).unwrap();
         print!("{}", FOOD_CHAR);
