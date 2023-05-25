@@ -138,7 +138,6 @@ fn main() {
 
     stdout.execute(cursor::Show).unwrap();
     terminal::disable_raw_mode().unwrap();
-    stdout.execute(terminal::Clear(ClearType::All)).unwrap();
-    stdout.execute(cursor::MoveTo(0, 0)).unwrap();
+    stdout.execute(cursor::MoveTo(0, HEIGHT)).unwrap();
     println!("Game over! Your score is {}", score);
 }
