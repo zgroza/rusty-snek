@@ -9,6 +9,16 @@ const WIDTH: u16 = 40;
 const HEIGHT: u16 = 20;
 const SNAKE_CHAR: char = 'O';
 const FOOD_CHAR: char = 'X';
+const WALL_CHAR: char = '#';
+macro_rules! red {
+    () => {"\x1b[31m{}\x1b[0m"};
+}
+macro_rules! green {
+    () => {"\x1b[32m{}\x1b[0m"};
+}
+macro_rules! yellow {
+    () => {"\x1b[33m{}\x1b[0m"};
+}
 
 struct Snake {
     body: Vec<(u16, u16)>,
@@ -55,11 +65,19 @@ impl Snake {
     }
 }
 
+fn generate_food(snake: &Snake) -> (u16, u16) {
+    let mut rng = rand::thread_rng();
+    let mut food = snake.body[0];
+    while snake.body.contains(&food) {
+        food = (rng.gen_range(1..WIDTH - 1), rng.gen_range(1..HEIGHT - 1));
+    }
+    food
+}
+
 fn main() {
     let mut stdout = stdout();
-    let mut rng = rand::thread_rng();
     let mut snake = Snake::new();
-    let mut food = (rng.gen_range(1..WIDTH - 1), rng.gen_range(1..HEIGHT - 1));
+    let mut food = generate_food(&snake);
     let mut score = 0;
 
     terminal::enable_raw_mode().unwrap();
@@ -68,13 +86,13 @@ fn main() {
     for y in 0..HEIGHT {
         for x in [0, WIDTH - 1] {
             stdout.execute(cursor::MoveTo(x, y)).unwrap();
-            print!("#");
+            print!(yellow!(), WALL_CHAR);
         }
     }
     for x in 1..WIDTH - 1 {
         for y in [0, HEIGHT - 1] {
             stdout.execute(cursor::MoveTo(x, y)).unwrap();
-            print!("#");
+            print!(yellow!(), WALL_CHAR);
         }
     }
     
@@ -82,10 +100,10 @@ fn main() {
         stdout.execute(cursor::MoveTo(snake.grow_space.0, snake.grow_space.1)).unwrap();
         print!(" ");
         stdout.execute(cursor::MoveTo(food.0, food.1)).unwrap();
-        print!("{}", FOOD_CHAR);
+        print!(red!(), FOOD_CHAR);
         for &(x, y) in &snake.body {
             stdout.execute(cursor::MoveTo(x, y)).unwrap();
-            print!("{}", SNAKE_CHAR);
+            print!(green!(), SNAKE_CHAR);
         }
         stdout.flush().unwrap();
 
@@ -109,7 +127,7 @@ fn main() {
 
         if snake.body[0] == food {
             snake.grow();
-            food = (rng.gen_range(1..WIDTH - 1), rng.gen_range(1..HEIGHT - 1));
+            food = generate_food(&snake);
             score += 1;
         }
 
