@@ -121,6 +121,10 @@ fn main() {
                         KeyCode::Down => Direction::Down,
                         KeyCode::Left => Direction::Left,
                         KeyCode::Right => Direction::Right,
+                        KeyCode::Char('w') => Direction::Up,
+                        KeyCode::Char('s') => Direction::Down,
+                        KeyCode::Char('a') => Direction::Left,
+                        KeyCode::Char('d') => Direction::Right,
                         KeyCode::Esc => {break 'main_loop;},
                         _ => snake.direction,
                     };
