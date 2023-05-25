@@ -10,7 +10,7 @@ const HEIGHT: u16 = 20;
 const SNAKE_CHAR: char = 'O';
 const FOOD_CHAR: char = 'X';
 const WALL_CHAR: char = '#';
-const CURRENT_SCORE: &str = "Your score is ";
+const CURRENT_SCORE: &str = "Score: ";
 macro_rules! red {
     () => {"\x1b[31m{}\x1b[0m"};
 }
@@ -19,6 +19,9 @@ macro_rules! green {
 }
 macro_rules! yellow {
     () => {"\x1b[33m{}\x1b[0m"};
+}
+macro_rules! blue {
+    () => {"\x1b[34m{}\x1b[0m"};
 }
 
 struct Snake {
@@ -138,7 +141,7 @@ fn main() {
             break;
         }
         stdout.execute(cursor::MoveTo(CURRENT_SCORE.len() as u16, HEIGHT)).unwrap();
-        print!("{}", score);
+        print!(blue!(), score);
     }
 
     stdout.execute(cursor::Show).unwrap();
