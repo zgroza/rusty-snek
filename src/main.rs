@@ -10,6 +10,7 @@ const HEIGHT: u16 = 20;
 const SNAKE_CHAR: char = 'O';
 const FOOD_CHAR: char = 'X';
 const WALL_CHAR: char = '#';
+const CURRENT_SCORE: &str = "Your score is ";
 macro_rules! red {
     () => {"\x1b[31m{}\x1b[0m"};
 }
@@ -95,6 +96,8 @@ fn main() {
             print!(yellow!(), WALL_CHAR);
         }
     }
+    stdout.execute(cursor::MoveTo(0, HEIGHT)).unwrap();
+    print!("{}", CURRENT_SCORE);
     
     'main_loop: loop {
         stdout.execute(cursor::MoveTo(snake.grow_space.0, snake.grow_space.1)).unwrap();
@@ -134,6 +137,8 @@ fn main() {
         if snake.check_collision() {
             break;
         }
+        stdout.execute(cursor::MoveTo(CURRENT_SCORE.len() as u16, HEIGHT)).unwrap();
+        print!("{}", score);
     }
 
     stdout.execute(cursor::Show).unwrap();
